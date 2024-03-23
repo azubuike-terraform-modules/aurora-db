@@ -25,6 +25,6 @@ variable "master_password" {
 variable "backup_retention_period" {
     type = number
 }
-variable "count" {
+variable "db_count" {
   type = number
 }
