@@ -1,30 +1,37 @@
 variable "instance_class" {
-    type = string
+  type = string
 }
 variable "cluster_identifier" {
-    type = string
+  type = string
 }
 variable "engine" {
-    type = string
+  type = string
 }
 variable "engine_version" {
-    type = string
+  type = string
 }
 variable "availability_zones" {
-    type = list(string)
+  type = list(string)
 }
 variable "database_name" {
-    type = string
+  type = string
 }
 variable "master_username" {
-    type = string
+  type = string
 }
 variable "master_password" {
-    type = string
+  type = string
 }
 variable "backup_retention_period" {
-    type = number
+  type = number
 }
 variable "db_count" {
   type = number
+}
+variable "db_tags"{
+  type = object({
+    tier = string
+    group = string
+  })
+
 }
