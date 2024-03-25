@@ -1,3 +1,8 @@
+data "aws_db_cluster_snapshot" "development_final_snapshot" {
+  db_cluster_identifier = var.cluster_identifier
+  most_recent           = true
+}
+
 resource "aws_rds_cluster_instance" "cluster_instances" {
   count              = var.db_count
   identifier         = "${var.cluster_identifier}-${count.index}"
@@ -16,7 +21,12 @@ resource "aws_rds_cluster" "default" {
   master_username         = var.master_username
   master_password         = var.master_password
   backup_retention_period = var.backup_retention_period
-  skip_final_snapshot     = true
+  skip_final_snapshot     = false
+  snapshot_identifier = data.aws_db_cluster_snapshot.development_final_snapshot.id
+
+  lifecycle {
+    ignore_changes = [snapshot_identifier]
+  }
 
   tags = var.db_tags
 
