@@ -10,6 +10,7 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
   instance_class     = var.instance_class
   engine             = aws_rds_cluster.default.engine
   engine_version     = aws_rds_cluster.default.engine_version
+  db_subnet_group_name =""
 }
 
 resource "aws_rds_cluster" "default" {
@@ -23,7 +24,11 @@ resource "aws_rds_cluster" "default" {
   backup_retention_period = var.backup_retention_period
   skip_final_snapshot     = false
   snapshot_identifier = data.aws_db_cluster_snapshot.development_final_snapshot.id
-
+  copy_tags_to_snapshot = true
+  db_subnet_group_name = var.db_subnet_group_name
+  storage_encrypted = true
+  kms_key_id = var.kms_key_id
+  vpc_security_group_ids = var.vpc_security_group_ids 
   lifecycle {
     ignore_changes = [snapshot_identifier]
   }

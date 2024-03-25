@@ -33,5 +33,13 @@ variable "db_tags"{
     tier = string
     group = string
   })
-
+}
+variable "db_subnet_group_name" {
+  type = string
+}
+variable "vpc_security_group_ids" {
+  type = list(string)
+}
+variable "kms_key_id" {
+  type = string
 }
