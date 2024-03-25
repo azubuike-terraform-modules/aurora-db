@@ -5,6 +5,12 @@ data "aws_db_cluster_snapshot" "development_final_snapshot" {
 # data "aws_subnet" "selected" {
 #   id = var.private_subnets[0]
 # }
+data "aws_secretsmanager_secret" "db_secret_password" {
+  name = var.secret_manager_name
+}
+data "aws_secretsmanager_secret_version" "db_secret_password" {
+  secret_id = data.aws_secretsmanager_secret.db_secret_password.id
+}
 resource "aws_rds_cluster_instance" "cluster_instances" {
   count              = var.db_count
   identifier         = "${var.cluster_identifier}-${count.index}"
@@ -22,7 +28,7 @@ resource "aws_rds_cluster" "default" {
   availability_zones      = var.availability_zones
   database_name           = var.database_name
   master_username         = var.master_username
-  master_password         = var.master_password
+  master_password         = jsondecode(data.aws_secretsmanager_secret_version.db_secret_password.secret_string)["password"]
   backup_retention_period = var.backup_retention_period
   skip_final_snapshot     = false
   snapshot_identifier = data.aws_db_cluster_snapshot.development_final_snapshot.id
