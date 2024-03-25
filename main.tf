@@ -2,7 +2,9 @@ data "aws_db_cluster_snapshot" "development_final_snapshot" {
   db_cluster_identifier = var.cluster_identifier
   most_recent           = true
 }
-
+# data "aws_subnet" "selected" {
+#   id = var.private_subnets[0]
+# }
 resource "aws_rds_cluster_instance" "cluster_instances" {
   count              = var.db_count
   identifier         = "${var.cluster_identifier}-${count.index}"
@@ -25,7 +27,7 @@ resource "aws_rds_cluster" "default" {
   skip_final_snapshot     = false
   snapshot_identifier = data.aws_db_cluster_snapshot.development_final_snapshot.id
   copy_tags_to_snapshot = true
-  db_subnet_group_name = aws_db_subnet_group.default.name
+  # db_subnet_group_name = aws_db_subnet_group.default.name
   storage_encrypted = true
   kms_key_id = var.kms_key_id
   vpc_security_group_ids = var.vpc_security_group_ids 

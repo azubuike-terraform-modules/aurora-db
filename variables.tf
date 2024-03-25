@@ -43,3 +43,7 @@ variable "vpc_security_group_ids" {
 variable "kms_key_id" {
   type = string
 }
+variable "private_subnets" {
+  type = list(string)
+}
+
